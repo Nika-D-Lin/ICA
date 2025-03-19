@@ -4,7 +4,7 @@ def most_frequent_trinucleotide(sequence):
     trinucleotides = [sequence[i:i+3] for i in range(0, len(sequence)-2, 3)]
     freq = Counter(trinucleotides)
     most_common = freq.most_common(1)[0]
-    return most_common  # 返回最常见的三核苷酸及其出现次数
+    return most_common
 
 genetic_code = {
     'AUG': 'Methionine', 'UUU': 'Phenylalanine', 'UUC': 'Phenylalanine',
@@ -52,7 +52,7 @@ def gc_content(sequence):
     return (gc_count / len(sequence)) * 100
 
 mRNA_sequence = input("输入一串RNA序列:")
-print(f"最常见的三核苷酸是:{most_frequent_trinucleotide(mRNA_sequence)}")
-print(f"最常见的氨基酸是:{most_frequent_amino_acid(mRNA_sequence) }")
+print(f"The most frequent trinucleotide:{most_frequent_trinucleotide(mRNA_sequence)}")
+print(f"The most frequent amino acid:{most_frequent_amino_acid(mRNA_sequence) }")
 plot_amino_acid_frequencies(mRNA_sequence)
-print(f"GC 含量: {gc_content(mRNA_sequence):.2f}%")
+print(f"gc content: {gc_content(mRNA_sequence):.2f}%")
