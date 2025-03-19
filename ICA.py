@@ -51,7 +51,7 @@ def gc_content(sequence):
     gc_count = sequence.count('G') + sequence.count('C')
     return (gc_count / len(sequence)) * 100
 
-mRNA_sequence = input("输入一串RNA序列:")
+mRNA_sequence = input("Enter a string of RNA sequences:")
 print(f"The most frequent trinucleotide:{most_frequent_trinucleotide(mRNA_sequence)}")
 print(f"The most frequent amino acid:{most_frequent_amino_acid(mRNA_sequence) }")
 plot_amino_acid_frequencies(mRNA_sequence)
