@@ -1,10 +1,5 @@
 from collections import Counter
-
-def most_frequent_trinucleotide(sequence):
-    trinucleotides = [sequence[i:i+3] for i in range(0, len(sequence)-2, 3)]
-    freq = Counter(trinucleotides)
-    most_common = freq.most_common(1)[0]
-    return most_common
+import matplotlib.pyplot as plt
 
 genetic_code = {
     'AUG': 'Methionine', 'UUU': 'Phenylalanine', 'UUC': 'Phenylalanine',
@@ -26,31 +21,53 @@ genetic_code = {
     'UAG': 'Stop', 'UGA': 'Stop'
 }
 
+def most_frequent_trinucleotide(sequence):
+    stop_codons = {"UAG", "UGA", "UAA"} 
+    trinucleotides = []
+
+    for i in range(0, len(sequence) - 2, 3):
+        codon = sequence[i:i+3]
+        if codon in stop_codons:
+            break  # 遇到 STOP 密码子直接停止
+        trinucleotides.append(codon)
+
+    freq = Counter(trinucleotides)
+    if not freq:
+        return None  # 如果没有有效密码子，返回 None
+    
+    most_common = freq.most_common(1)[0][0]
+    return most_common
+
 def most_frequent_amino_acid(sequence):
-    trinucleotide, _ = most_frequent_trinucleotide(sequence)
+    trinucleotide = most_frequent_trinucleotide(sequence)
+    if trinucleotide is None:  # 处理无密码子情况
+        return "Unknown"
     amino_acid = genetic_code.get(trinucleotide.replace("T", "U"), "Unknown")
     return amino_acid
-
-import matplotlib.pyplot as plt
 
 def plot_amino_acid_frequencies(sequence):
     trinucleotides = [sequence[i:i+3] for i in range(0, len(sequence)-2, 3)]
     amino_acids = [genetic_code.get(tri.replace("T", "U"), "Unknown") for tri in trinucleotides]
     freq = Counter(amino_acids)
+    
     plt.figure(figsize=(10, 5))
     plt.bar(freq.keys(), freq.values(), color='skyblue')
     plt.xlabel('Amino Acids')
     plt.ylabel('Frequency')
     plt.title('Amino Acid Frequency Distribution')
-    plt.xticks(rotation=0)
+    plt.xticks(rotation=45, ha="right")  # 旋转 45° 并右对齐，避免重叠
     plt.show()
 
 def gc_content(sequence):
     gc_count = sequence.count('G') + sequence.count('C')
-    return (gc_count / len(sequence)) * 100
+    return (gc_count / len(sequence)) * 100 if sequence else 0  # 避免除零错误
 
-mRNA_sequence = input("Enter a string of RNA sequences:")
-print(f"The most frequent trinucleotide:{most_frequent_trinucleotide(mRNA_sequence)}")
-print(f"The most frequent amino acid:{most_frequent_amino_acid(mRNA_sequence) }")
-plot_amino_acid_frequencies(mRNA_sequence)
-print(f"gc content: {gc_content(mRNA_sequence):.2f}%")
+# 用户输入
+mRNA_sequence = input("Enter a string of RNA sequences:").strip().upper()
+if not mRNA_sequence:
+    print("Error: No RNA sequence provided!")
+else:
+    print(f"The most frequent trinucleotide: {most_frequent_trinucleotide(mRNA_sequence)}")
+    print(f"The most frequent amino acid: {most_frequent_amino_acid(mRNA_sequence)}")
+    plot_amino_acid_frequencies(mRNA_sequence)
+    print(f"GC content: {gc_content(mRNA_sequence):.2f}%")
