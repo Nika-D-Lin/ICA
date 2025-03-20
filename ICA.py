@@ -63,7 +63,7 @@ def gc_content(sequence):
     return (gc_count / len(sequence)) * 100 if sequence else 0  # 避免除零错误
 
 # 用户输入
-mRNA_sequence = input("Enter a string of RNA sequences:").strip().upper()
+mRNA_sequence = input("Enter a string of RNA sequences(please start with the codon AUG):").strip().upper()
 if not mRNA_sequence:
     print("Error: No RNA sequence provided!")
 else:
