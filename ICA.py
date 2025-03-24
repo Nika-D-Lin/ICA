@@ -24,45 +24,39 @@ genetic_code = {
 def most_frequent_trinucleotide(sequence):
     stop_codons = {"UAG", "UGA", "UAA"} 
     trinucleotides = []
-
     for i in range(0, len(sequence) - 2, 3):
         codon = sequence[i:i+3]
         if codon in stop_codons:
-            break  # 遇到 STOP 密码子直接停止
+            break  #stop at the stop_codons
         trinucleotides.append(codon)
-
     freq = Counter(trinucleotides)
     if not freq:
-        return None  # 如果没有有效密码子，返回 None
-    
+        return None  #return None when the trinucleotide do not exist
     most_common = freq.most_common(1)[0][0]
     return most_common
 
 def most_frequent_amino_acid(sequence):
     trinucleotide = most_frequent_trinucleotide(sequence)
-    if trinucleotide is None:  # 处理无密码子情况
+    if trinucleotide is None:  #deal with the case that there is no trinucleotide
         return "Unknown"
-    amino_acid = genetic_code.get(trinucleotide.replace("T", "U"), "Unknown")
+    amino_acid = genetic_code.get(trinucleotide, "Unknown")
     return amino_acid
 
 def plot_amino_acid_frequencies(sequence):
     trinucleotides = [sequence[i:i+3] for i in range(0, len(sequence)-2, 3)]
-    amino_acids = [genetic_code.get(tri.replace("T", "U"), "Unknown") for tri in trinucleotides]
+    amino_acids = [genetic_code.get(tri, "Unknown") for tri in trinucleotides] #use key of genetic_code to find the value and store
     freq = Counter(amino_acids)
-    
     plt.figure(figsize=(10, 5))
     plt.bar(freq.keys(), freq.values(), color='skyblue')
     plt.xlabel('Amino Acids')
     plt.ylabel('Frequency')
     plt.title('Amino Acid Frequency Distribution')
-    plt.xticks(rotation=45, ha="right")  # 旋转 45° 并右对齐，避免重叠
     plt.show()
 
 def gc_content(sequence):
     gc_count = sequence.count('G') + sequence.count('C')
-    return (gc_count / len(sequence)) * 100 if sequence else 0  # 避免除零错误
+    return (gc_count / len(sequence)) * 100 if sequence else 0  #avoid the case that the length is 0
 
-# 用户输入
 mRNA_sequence = input("Enter a string of RNA sequences(please start with the codon AUG):").strip().upper()
 if not mRNA_sequence:
     print("Error: No RNA sequence provided!")
