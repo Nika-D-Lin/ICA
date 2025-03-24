@@ -58,11 +58,8 @@ def gc_content(sequence):
     gc_count = sequence.count('G') + sequence.count('C')
     return (gc_count / len(sequence)) * 100 if sequence else 0  #avoid the case that the length is 0
 
-mRNA_sequence = input("Enter a string of RNA sequences(please start with the codon AUG):").strip().upper()
-if not mRNA_sequence:
-    print("Error: No RNA sequence provided!")
-else:
-    print(f"The most frequent trinucleotide: {most_frequent_trinucleotide(mRNA_sequence)}")
-    print(f"The most frequent amino acid: {most_frequent_amino_acid(mRNA_sequence)}")
-    plot_amino_acid_frequencies(mRNA_sequence)
-    print(f"GC content: {gc_content(mRNA_sequence):.2f}%")
+mRNA_sequence = input("Enter a string of RNA sequences(please start with the codon AUG):").strip() #eliminates any leading or trailing spaces to avoid the fault
+print(f"The most frequent trinucleotide: {most_frequent_trinucleotide(mRNA_sequence)}")
+print(f"The most frequent amino acid: {most_frequent_amino_acid(mRNA_sequence)}")
+plot_amino_acid_frequencies(mRNA_sequence)
+print(f"GC content: {gc_content(mRNA_sequence):.2f}%")
