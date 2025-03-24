@@ -44,7 +44,8 @@ def most_frequent_amino_acid(sequence):
 
 def plot_amino_acid_frequencies(sequence):
     trinucleotides = [sequence[i:i+3] for i in range(0, len(sequence)-2, 3)]
-    amino_acids = [genetic_code.get(tri, "Unknown") for tri in trinucleotides] #use key of genetic_code to find the value and store
+    amino_acids = [genetic_code.get(tri, "Unknown") for tri in trinucleotides]
+    #use key of genetic_code to find the value and store. If there is none, return 'Unknow'.
     freq = Counter(amino_acids)
     plt.figure(figsize=(10, 5))
     plt.bar(freq.keys(), freq.values(), color='skyblue')
