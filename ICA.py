@@ -32,14 +32,14 @@ def most_frequent_trinucleotide(sequence):
     freq = Counter(trinucleotides)
     if not freq:
         return None  #return None when the trinucleotide do not exist
-    most_common = freq.most_common(1)[0][0]
+    most_common = freq.most_common(1)[0][0] #use the most_common function to pick out the target value
     return most_common
 
 def most_frequent_amino_acid(sequence):
     trinucleotide = most_frequent_trinucleotide(sequence)
     if trinucleotide is None:  #deal with the case that there is no trinucleotide
         return "Unknown"
-    amino_acid = genetic_code.get(trinucleotide, "Unknown")
+    amino_acid = genetic_code.get(trinucleotide, "Unknown") #store the value on the genetic_code based on the key-trinucleotide
     return amino_acid
 
 def plot_amino_acid_frequencies(sequence):
