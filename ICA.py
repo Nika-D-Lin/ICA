@@ -21,32 +21,31 @@ genetic_code = {
     'UAG': 'Stop', 'UGA': 'Stop'
 }
 
-def most_frequent_trinucleotide(sequence):
-    stop_codons = {"UAG", "UGA", "UAA"} 
+def most_frequent_trinucleotide(sequence): #the first function: identify the most common trinucleotide
+    stop_codons = {"UAG", "UGA", "UAA"} #three stop codons
     trinucleotides = []
-    for i in range(0, len(sequence) - 2, 3):
-        codon = sequence[i:i+3]
+    for i in range(0, len(sequence) - 2, 3): #check three base-pairs at one time
+        codon = sequence[i:i+3] #put these three together
         if codon in stop_codons:
-            break  #stop at the stop_codons
+            break  #stop at the stop_codons   stop the closeest circulation
         trinucleotides.append(codon)
-    freq = Counter(trinucleotides)
+    freq = Counter(trinucleotides) #use Counter to statistic and return the name and number of each element
     if not freq:
         return None  #return None when the trinucleotide do not exist
     most_common = freq.most_common(1)[0][0] #use the most_common function to pick out the target value
     return most_common
 
-def most_frequent_amino_acid(sequence):
+def most_frequent_amino_acid(sequence): #the second finction: identify whether the first function's return has the corresponding most frequent amino acid
     trinucleotide = most_frequent_trinucleotide(sequence)
     if trinucleotide is None:  #deal with the case that there is no trinucleotide
         return "Unknown"
-    amino_acid = genetic_code.get(trinucleotide, "Unknown") #store the value on the genetic_code based on the key-trinucleotide
+    amino_acid = genetic_code.get(trinucleotide, "Unknown") #store the value on the genetic_code based on the key-trinucleotide, if there is none return 'unknow'
     return amino_acid
 
-def plot_amino_acid_frequencies(sequence):
-    trinucleotides = [sequence[i:i+3] for i in range(0, len(sequence)-2, 3)]
-    amino_acids = [genetic_code.get(tri, "Unknown") for tri in trinucleotides]
-    #use key of genetic_code to find the value and store. If there is none, return 'Unknow'.
-    freq = Counter(amino_acids)
+def plot_amino_acid_frequencies(sequence): #the third function: draw the barchart 
+    trinucleotides = [sequence[i:i+3] for i in range(0, len(sequence)-2, 3)] #check three base-pairs together
+    amino_acids = [genetic_code.get(tri, "Unknown") for tri in trinucleotides] #use key of genetic_code to find the value and store. If there is none, return 'Unknow'.
+    freq = Counter(amino_acids) #statistic and return the name and number of each element
     plt.figure(figsize=(10, 5))
     plt.bar(freq.keys(), freq.values(), color='skyblue')
     plt.xlabel('Amino Acids')
@@ -54,12 +53,12 @@ def plot_amino_acid_frequencies(sequence):
     plt.title('Amino Acid Frequency Distribution')
     plt.show()
 
-def gc_content(sequence):
-    gc_count = sequence.count('G') + sequence.count('C')
-    return (gc_count / len(sequence)) * 100 if sequence else 0  #avoid the case that the length is 0
+def GC_content(sequence):
+    GC_count = sequence.count('G') + sequence.count('C')
+    return (GC_count / len(sequence)) * 100 if sequence else 0  #avoid the case that the length is 0
 
 mRNA_sequence = input("Enter a string of RNA sequences(please start with the codon AUG):").strip() #eliminates any leading or trailing spaces to avoid the fault
 print(f"The most frequent trinucleotide: {most_frequent_trinucleotide(mRNA_sequence)}")
 print(f"The most frequent amino acid: {most_frequent_amino_acid(mRNA_sequence)}")
 plot_amino_acid_frequencies(mRNA_sequence)
-print(f"GC content: {gc_content(mRNA_sequence):.2f}%")
+print(f"GC content: {GC_content(mRNA_sequence):.2f}%")
