@@ -30,21 +30,21 @@ def most_frequent_trinucleotide(sequence): #the first function: identify the mos
             break  #stop at the stop_codons   stop the closeest circulation
         trinucleotides.append(codon)
     freq = Counter(trinucleotides) #use Counter to statistic and return the name and number of each element
-    if not freq:
-        return None  #return None when the trinucleotide do not exist
+    #if not freq:
+    #    return None  #return None when the trinucleotide do not exist
     most_common = freq.most_common(1)[0][0] #use the most_common function to pick out the target value
     return most_common
 
 def most_frequent_amino_acid(sequence): #the second finction: identify whether the first function's return has the corresponding most frequent amino acid
     trinucleotide = most_frequent_trinucleotide(sequence)
-    if trinucleotide is None:  #deal with the case that there is no trinucleotide
-        return "Unknown"
-    amino_acid = genetic_code.get(trinucleotide, "Unknown") #store the value on the genetic_code based on the key-trinucleotide, if there is none return 'unknow'
+    #if trinucleotide is None:  #deal with the case that there is no trinucleotide
+    #    return "Unknown"
+    amino_acid = genetic_code[trinucleotide] #store the value on the genetic_code based on the key-trinucleotide
     return amino_acid
 
 def plot_amino_acid_frequencies(sequence): #the third function: draw the barchart 
     trinucleotides = [sequence[i:i+3] for i in range(0, len(sequence)-2, 3)] #check three base-pairs together
-    amino_acids = [genetic_code.get(tri, "Unknown") for tri in trinucleotides] #use key of genetic_code to find the value and store. If there is none, return 'Unknow'.
+    amino_acids = [genetic_code[tri] for tri in trinucleotides] #use key of genetic_code to find the value and store.
     freq = Counter(amino_acids) #statistic and return the name and number of each element
     plt.figure(figsize=(10, 5))
     plt.bar(freq.keys(), freq.values(), color='skyblue')
