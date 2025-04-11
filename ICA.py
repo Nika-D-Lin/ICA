@@ -30,15 +30,11 @@ def most_frequent_trinucleotide(sequence): #the first function: identify the mos
             break  #stop at the stop_codons   stop the closeest circulation
         trinucleotides.append(codon)
     freq = Counter(trinucleotides) #use Counter to statistic and return the name and number of each element
-    #if not freq:
-    #    return None  #return None when the trinucleotide do not exist
     most_common = freq.most_common(1)[0][0] #use the most_common function to pick out the target value
     return most_common
 
 def most_frequent_amino_acid(sequence): #the second finction: identify whether the first function's return has the corresponding most frequent amino acid
     trinucleotide = most_frequent_trinucleotide(sequence)
-    #if trinucleotide is None:  #deal with the case that there is no trinucleotide
-    #    return "Unknown"
     amino_acid = genetic_code[trinucleotide] #store the value on the genetic_code based on the key-trinucleotide
     return amino_acid
 
@@ -46,19 +42,19 @@ def plot_amino_acid_frequencies(sequence): #the third function: draw the barchar
     trinucleotides = [sequence[i:i+3] for i in range(0, len(sequence)-2, 3)] #check three base-pairs together
     amino_acids = [genetic_code[tri] for tri in trinucleotides] #use key of genetic_code to find the value and store.
     freq = Counter(amino_acids) #statistic and return the name and number of each element
-    plt.figure(figsize=(10, 5))
-    plt.bar(freq.keys(), freq.values(), color='skyblue')
-    plt.xlabel('Amino Acids')
-    plt.ylabel('Frequency')
-    plt.title('Amino Acid Frequency Distribution')
+    plt.figure(figsize=(10, 5)) #to follow the guidence
+    plt.bar(freq.keys(), freq.values(), color='skyblue') #use freq.key() as the x, freq.values() as y, and use the skyblue color
+    plt.xlabel('Amino Acids') #label x axis
+    plt.ylabel('Frequency') #label y axis
+    plt.title('Amino Acid Frequency Distribution') #name the whole picture
     plt.show()
 
 def GC_content(sequence):
-    GC_count = sequence.count('G') + sequence.count('C')
+    GC_count = sequence.count('G') + sequence.count('C') #use count function to count the number of C and G
     return (GC_count / len(sequence)) * 100 if sequence else 0  #avoid the case that the length is 0
 
 mRNA_sequence = input("Enter a string of RNA sequences(please start with the codon AUG):").strip() #eliminates any leading or trailing spaces to avoid the fault
 print(f"The most frequent trinucleotide: {most_frequent_trinucleotide(mRNA_sequence)}")
 print(f"The most frequent amino acid: {most_frequent_amino_acid(mRNA_sequence)}")
 plot_amino_acid_frequencies(mRNA_sequence)
-print(f"GC content: {GC_content(mRNA_sequence):.2f}%")
+print(f"GC content: {GC_content(mRNA_sequence):.2f}%") #:.2f means keep two numbers after the point
