@@ -51,7 +51,7 @@ def plot_amino_acid_frequencies(sequence): #the third function: draw the barchar
 
 def GC_content(sequence):
     GC_count = sequence.count('G') + sequence.count('C') #use count function to count the number of C and G
-    return (GC_count / len(sequence)) * 100 if sequence else 0  #avoid the case that the length is 0
+    return (GC_count / len(sequence)) * 100
 
 mRNA_sequence = input("Enter a string of RNA sequences(please start with the codon AUG):").strip() #eliminates any leading or trailing spaces to avoid the fault
 print(f"The most frequent trinucleotide: {most_frequent_trinucleotide(mRNA_sequence)}")
