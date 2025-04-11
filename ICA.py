@@ -22,7 +22,7 @@ genetic_code = {
 }
 
 def most_frequent_trinucleotide(sequence): #the first function: identify the most common trinucleotide
-    stop_codons = {"UAG", "UGA", "UAA"} #three stop codons
+    stop_codons = ["UAG", "UGA", "UAA"] #three stop codons
     trinucleotides = []
     for i in range(0, len(sequence) - 2, 3): #check three base-pairs at one time
         codon = sequence[i:i+3] #put these three together
