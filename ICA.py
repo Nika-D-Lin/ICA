@@ -29,14 +29,22 @@ def most_frequent_trinucleotide(sequence): #the first function: identify the mos
         if codon in stop_codons:
             break  #stop at the stop_codons   stop the closeest circulation
         trinucleotides.append(codon)
-    freq = Counter(trinucleotides) #use Counter to statistic and return the name and number of each element
-    most_common = freq.most_common(1)[0][0] #use the most_common function to pick out the target value
-    return most_common
+    freq = Counter(trinucleotides) #use Counter to statistic and return the name and number of each element in a dictionary style
+    most_common = []
+    for num in range((len(freq))): #to make sure that when there is more than one most frequent trinucleotide, they all can be printed
+        if freq.most_common()[num][1] == freq.most_common(1)[0][1]:
+            most_common.append(freq.most_common()[num][0])
+    return ','.join(most_common) #use join() function to delete bracket
+
+    #freq.most_common(1)[0][0] #use the most_common function to return a list of tuples and pick out the target tuple that has the highest statistical magnitude, and then search the tuple's first element (trinucleotide).
+    #return most_common
 
 def most_frequent_amino_acid(sequence): #the second finction: identify whether the first function's return has the corresponding most frequent amino acid
-    trinucleotide = most_frequent_trinucleotide(sequence)
-    amino_acid = genetic_code[trinucleotide] #store the value on the genetic_code based on the key-trinucleotide
-    return amino_acid
+    trinucleotide = most_frequent_trinucleotide(sequence).split(",")
+    amino_acid = []
+    for item in trinucleotide:
+        amino_acid.append(genetic_code[item]) #store the value on the genetic_code based on the key-trinucleotide
+    return ','.join(amino_acid)
 
 def plot_amino_acid_frequencies(sequence): #the third function: draw the barchart 
     trinucleotides = [sequence[i:i+3] for i in range(0, len(sequence)-2, 3)] #check three base-pairs together
