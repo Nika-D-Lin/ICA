@@ -1,5 +1,6 @@
 from collections import Counter
 import matplotlib.pyplot as plt
+import numpy as np
 
 genetic_code = {
     'AUG': 'Methionine', 'UUU': 'Phenylalanine', 'UUC': 'Phenylalanine',
@@ -40,11 +41,11 @@ def most_frequent_trinucleotide(sequence): #the first function: identify the mos
     #return most_common
 
 def most_frequent_amino_acid(sequence): #the second finction: identify whether the first function's return has the corresponding most frequent amino acid
-    trinucleotide = most_frequent_trinucleotide(sequence).split(",")
+    trinucleotide = most_frequent_trinucleotide(sequence).split(",") #create a list to record
     amino_acid = []
-    for item in trinucleotide:
+    for item in trinucleotide: #make sure that each trinucleotide can be identified
         amino_acid.append(genetic_code[item]) #store the value on the genetic_code based on the key-trinucleotide
-    return ','.join(amino_acid)
+    return ','.join(amino_acid) #use join() function to delete bracket
 
 def plot_amino_acid_frequencies(sequence): #the third function: draw the barchart 
     trinucleotides = [sequence[i:i+3] for i in range(0, len(sequence)-2, 3)] #check three base-pairs together
@@ -61,8 +62,46 @@ def GC_content(sequence):
     GC_count = sequence.count('G') + sequence.count('C') #use count function to count the number of C and G
     return (GC_count / len(sequence)) * 100
 
+def mutation(sequence):#the additional fuction:to simulate a genetic mutation and determine whether it affects the corresponding amino acid and interupts the formation of final protein
+    bases=['A', 'U', 'C', 'G'] #create an array to store the four bases of RNA
+    stop_codons = ["UAG", "UGA", "UAA"]
+    trinucleotides = [sequence[i:i+3] for i in range(0, len(sequence)-2, 3)]
+    for item in stop_codons:
+        if item in trinucleotides:
+            stop=sequence.find(item)+2
+        else:
+            stop=len(sequence)
+    
+    n=stop#to find the first base of the stop codon,where the mutation stops to be possible to happen
+
+    position=np.random.randint(0, n+1) #randomly choose a position in the sequence
+    current_base=sequence[position] #store the base in this position
+    bases.remove(current_base)#eliminate the base in this position from the array
+    new_base = np.random.choice(bases)#randomly choose a new base from the array
+    mutated_sequence = sequence[:position] + new_base + sequence[position + 1:] #replace the base in the position with the new base and store the new sequence
+
+    codon_start = position - (position % 3)#go back to the first base of the mutated codon
+    #find the original codon and mutated codon
+    original_codon = sequence[codon_start:codon_start+3]
+    mutated_codon = mutated_sequence[codon_start:codon_start+3]
+    #then using the genetic code to find the corresponding amino acid
+    original_amino_acid = genetic_code[original_codon]
+    mutated_amino_acid = genetic_code[mutated_codon]
+
+    #compare original amino acid and find out the mutation type
+    if mutated_amino_acid == "Stop":
+        mutation_type = "nonsense mutation"
+    elif original_amino_acid == mutated_amino_acid:
+        mutation_type = "silent mutation"
+    elif original_amino_acid != mutated_amino_acid:
+        mutation_type = "missense mutation"
+    
+    return mutation_type, mutated_sequence
+
 mRNA_sequence = input("Enter a string of RNA sequences(please start with the codon AUG):").strip() #eliminates any leading or trailing spaces to avoid the fault
 print(f"The most frequent trinucleotide: {most_frequent_trinucleotide(mRNA_sequence)}")
 print(f"The most frequent amino acid: {most_frequent_amino_acid(mRNA_sequence)}")
 plot_amino_acid_frequencies(mRNA_sequence)
 print(f"GC content: {GC_content(mRNA_sequence):.2f}%") #:.2f means keep two numbers after the point
+mutation_type, mutated_sequence = mutation(mRNA_sequence)#call the mutation function to find out the mutation type
+print(f"After the mutation, the sequence is: {mutated_sequence} \nand this mutation is: {mutation_type}") #print the result of mutation
