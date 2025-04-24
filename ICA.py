@@ -68,13 +68,13 @@ def mutation(sequence):#the additional fuction:to simulate a genetic mutation an
     trinucleotides = [sequence[i:i+3] for i in range(0, len(sequence)-2, 3)]
     for item in stop_codons:
         if item in trinucleotides:
-            stop=sequence.find(item)+2
+            stop=sequence.find(item)+1
         else:
             stop=len(sequence)
     
     n=stop#to find the first base of the stop codon,where the mutation stops to be possible to happen
 
-    position=np.random.randint(0, n+1) #randomly choose a position in the sequence
+    position=np.random.randint(0, n) #randomly choose a position in the sequence
     current_base=sequence[position] #store the base in this position
     bases.remove(current_base)#eliminate the base in this position from the array
     new_base = np.random.choice(bases)#randomly choose a new base from the array
