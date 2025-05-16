@@ -40,7 +40,7 @@ def most_frequent_trinucleotide(sequence): #the first function: identify the mos
     #freq.most_common(1)[0][0] #use the most_common function to return a list of tuples and pick out the target tuple that has the highest statistical magnitude, and then search the tuple's first element (trinucleotide).
     #return most_common
 
-def most_frequent_amino_acid(sequence): #the second finction: identify whether the first function's return has the corresponding most frequent amino acid
+def most_frequent_amino_acid(sequence): #the second function: identify whether the first function's return has the corresponding most frequent amino acid
     trinucleotide = most_frequent_trinucleotide(sequence).split(",") #create a list to record
     amino_acid = []
     for item in trinucleotide: #make sure that each trinucleotide can be identified
@@ -56,6 +56,7 @@ def plot_amino_acid_frequencies(sequence): #the third function: draw the barchar
     plt.xlabel('Amino Acids') #label x axis
     plt.ylabel('Frequency') #label y axis
     plt.title('Amino Acid Frequency Distribution') #name the whole picture
+    plt.xticks(rotation=-45)
     plt.show()
 
 def GC_content(sequence):
@@ -68,19 +69,19 @@ def mutation(sequence):#the additional fuction:to simulate a genetic mutation an
     trinucleotides = [sequence[i:i+3] for i in range(0, len(sequence)-2, 3)]
     for item in stop_codons:
         if item in trinucleotides:
-            stop=sequence.find(item)+1
+            stop = sequence.find(item)+1
         else:
-            stop=len(sequence)
+            stop = len(sequence)
     
-    n=stop#to find the first base of the stop codon,where the mutation stops to be possible to happen
+    n = stop #to find the first base of the stop codon,where the mutation stops to be possible to happen
 
-    position=np.random.randint(0, n) #randomly choose a position in the sequence
-    current_base=sequence[position] #store the base in this position
-    bases.remove(current_base)#eliminate the base in this position from the array
+    position = np.random.randint(0, n) #randomly choose a position in the sequence
+    current_base = sequence[position] #store the base in this position
+    bases.remove(current_base) #eliminate the base in this position from the array
     new_base = np.random.choice(bases)#randomly choose a new base from the array
     mutated_sequence = sequence[:position] + new_base + sequence[position + 1:] #replace the base in the position with the new base and store the new sequence
 
-    codon_start = position - (position % 3)#go back to the first base of the mutated codon
+    codon_start = position - (position % 3) #go back to the first base of the mutated codon
     #find the original codon and mutated codon
     original_codon = sequence[codon_start:codon_start+3]
     mutated_codon = mutated_sequence[codon_start:codon_start+3]
@@ -99,7 +100,7 @@ def mutation(sequence):#the additional fuction:to simulate a genetic mutation an
     return mutation_type, mutated_sequence
 
 mRNA_sequence = input("Enter a string of RNA sequences(please start with the codon AUG):").strip() #eliminates any leading or trailing spaces to avoid the fault
-print(f"The most frequent trinucleotide: {most_frequent_trinucleotide(mRNA_sequence)}")
+print(f"The most frequent trinucleotide: {most_frequent_trinucleotide(mRNA_sequence).replace('U','T')}")
 print(f"The most frequent amino acid: {most_frequent_amino_acid(mRNA_sequence)}")
 plot_amino_acid_frequencies(mRNA_sequence)
 print(f"GC content: {GC_content(mRNA_sequence):.2f}%") #:.2f means keep two numbers after the point
