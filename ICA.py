@@ -28,14 +28,14 @@ def most_frequent_trinucleotide(sequence): #the first function: identify the mos
     for i in range(0, len(sequence) - 2, 3): #check three base-pairs at one time
         codon = sequence[i:i+3] #put these three together
         if codon in stop_codons:
-            break  #stop at the stop_codons   stop the closeest circulation
+            break  #stop at the stop_codons   stop the closest circulation
         trinucleotides.append(codon)
     freq = Counter(trinucleotides) #use Counter to statistic and return the name and number of each element in a dictionary style
-    most_common = []
-    for num in range((len(freq))): #to make sure that when there is more than one most frequent trinucleotide, they all can be printed
-        if freq.most_common()[num][1] == freq.most_common(1)[0][1]:
-            most_common.append(freq.most_common()[num][0])
-    return ','.join(most_common) #use join() function to delete bracket
+    most_common_base = []
+    for num in range(len(freq)): #to make sure that when there is more than one most frequent trinucleotide, they all can be printed
+        if freq.most_common()[num][1] == freq.most_common(1)[0][1]: 
+            most_common_base.append(freq.most_common()[num][0])
+    return ','.join(most_common_base) #use join() function to delete bracket
 
     #freq.most_common(1)[0][0] #use the most_common function to return a list of tuples and pick out the target tuple that has the highest statistical magnitude, and then search the tuple's first element (trinucleotide).
     #return most_common
@@ -58,10 +58,6 @@ def plot_amino_acid_frequencies(sequence): #the third function: draw the barchar
     plt.title('Amino Acid Frequency Distribution') #name the whole picture
     plt.xticks(rotation=-45)
     plt.show()
-
-def GC_content(sequence):
-    GC_count = sequence.count('G') + sequence.count('C') #use count function to count the number of C and G
-    return (GC_count / len(sequence)) * 100
 
 def mutation(sequence):#the additional fuction:to simulate a genetic mutation and determine whether it affects the corresponding amino acid and interupts the formation of final protein
     bases=['A', 'U', 'C', 'G'] #create an array to store the four bases of RNA
@@ -100,9 +96,8 @@ def mutation(sequence):#the additional fuction:to simulate a genetic mutation an
     return mutation_type, mutated_sequence
 
 mRNA_sequence = input("Enter a string of RNA sequences(please start with the codon AUG):").strip() #eliminates any leading or trailing spaces to avoid the fault
-print(f"The most frequent trinucleotide: {most_frequent_trinucleotide(mRNA_sequence).replace('U','T')}")
+print(f"The most frequent trinucleotide: {most_frequent_trinucleotide(mRNA_sequence).replace("U","T")}") #use replace function to put RNA to DNA
 print(f"The most frequent amino acid: {most_frequent_amino_acid(mRNA_sequence)}")
 plot_amino_acid_frequencies(mRNA_sequence)
-print(f"GC content: {GC_content(mRNA_sequence):.2f}%") #:.2f means keep two numbers after the point
 mutation_type, mutated_sequence = mutation(mRNA_sequence)#call the mutation function to find out the mutation type
 print(f"After the mutation, the sequence is: {mutated_sequence} \nand this mutation is: {mutation_type}") #print the result of mutation
