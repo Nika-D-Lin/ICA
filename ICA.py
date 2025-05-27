@@ -32,13 +32,10 @@ def most_frequent_trinucleotide(sequence): #the first function: identify the mos
         trinucleotides.append(codon)
     freq = Counter(trinucleotides) #use Counter to statistic and return the name and number of each element in a dictionary style
     most_common_base = []
-    for num in range(len(freq)): #to make sure that when there is more than one most frequent trinucleotide, they all can be printed
+    for num in range(len(freq)): #to make sure that when there are more than one most frequent trinucleotide, they all can be printed
         if freq.most_common()[num][1] == freq.most_common(1)[0][1]: 
             most_common_base.append(freq.most_common()[num][0])
     return ','.join(most_common_base) #use join() function to delete bracket
-
-    #freq.most_common(1)[0][0] #use the most_common function to return a list of tuples and pick out the target tuple that has the highest statistical magnitude, and then search the tuple's first element (trinucleotide).
-    #return most_common
 
 def most_frequent_amino_acid(sequence): #the second function: identify whether the first function's return has the corresponding most frequent amino acid
     trinucleotide = most_frequent_trinucleotide(sequence).split(",") #create a list to record
@@ -59,7 +56,7 @@ def plot_amino_acid_frequencies(sequence): #the third function: draw the barchar
     plt.xticks(rotation=-45)
     plt.show()
 
-def mutation(sequence):#the additional fuction:to simulate a genetic mutation and determine whether it affects the corresponding amino acid and interupts the formation of final protein
+def mutation(sequence):#the additional fuction:to stimulate a point mutation and find out the mutation type based on its effects to the polypeptide
     bases=['A', 'U', 'C', 'G'] #create an array to store the four bases of RNA
     stop_codons = ["UAG", "UGA", "UAA"]
     trinucleotides = [sequence[i:i+3] for i in range(0, len(sequence)-2, 3)]
@@ -68,21 +65,18 @@ def mutation(sequence):#the additional fuction:to simulate a genetic mutation an
             stop = sequence.find(item)+1
         else:
             stop = len(sequence)
-    
-    n = stop #to find the first base of the stop codon,where the mutation stops to be possible to happen
+    n = stop #find the first base of the stop codon,where the mutation stops to be possible to happen
 
-    position = np.random.randint(0, n) #randomly choose a position in the sequence
+    position = np.random.randint(2, n) #randomly choose a position in the sequence
     current_base = sequence[position] #store the base in this position
     bases.remove(current_base) #eliminate the base in this position from the array
     new_base = np.random.choice(bases)#randomly choose a new base from the array
     mutated_sequence = sequence[:position] + new_base + sequence[position + 1:] #replace the base in the position with the new base and store the new sequence
 
     codon_start = position - (position % 3) #go back to the first base of the mutated codon
-    #find the original codon and mutated codon
-    original_codon = sequence[codon_start:codon_start+3]
+    original_codon = sequence[codon_start:codon_start+3]  #find the original codon and mutated codon
     mutated_codon = mutated_sequence[codon_start:codon_start+3]
-    #then using the genetic code to find the corresponding amino acid
-    original_amino_acid = genetic_code[original_codon]
+    original_amino_acid = genetic_code[original_codon]#then use the genetic code to find the corresponding amino acid
     mutated_amino_acid = genetic_code[mutated_codon]
 
     #compare original amino acid and find out the mutation type
